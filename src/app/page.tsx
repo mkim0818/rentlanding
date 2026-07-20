@@ -1,65 +1,95 @@
-import Image from "next/image";
+import HeroSection from '@/components/HeroSection';
+import BenefitsSection from '@/components/BenefitsSection';
+import CarShowcaseSection from '@/components/CarShowcaseSection';
+import RentalVsLeaseSection from '@/components/RentalVsLeaseSection';
+import ProcessSection from '@/components/ProcessSection';
+import ConsultationForm from '@/components/ConsultationForm';
+import TrustSection from '@/components/TrustSection';
+import FAQSection from '@/components/FAQSection';
+import CtaButton from '@/components/CtaButton';
+import FloatingButtons from '@/components/FloatingButtons';
+import { COMPANY, CTA } from '@/lib/constants';
+import type { Metadata } from 'next';
+import Script from 'next/script';
+
+export const metadata: Metadata = {
+  title: '○○렌터카 | 국산·수입차 장기렌트 무료 견적 상담',
+  description:
+    '월 28만원대부터, 초기비용 ZERO. 보험·세금·정비 모두 포함된 장기렌트. 무료 견적 상담으로 최적의 조건을 찾아드립니다.',
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: COMPANY.name,
+  telephone: COMPANY.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: COMPANY.address,
+    addressCountry: 'KR',
+  },
+  openingHours: 'Mo-Fr 09:00-18:00 Sa 09:00-14:00',
+  description:
+    '국산·수입차 장기렌트 전문. 월 28만원대부터, 초기비용 ZERO. 무료 견적 상담.',
+};
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <Script
+        id="json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <main className="flex-1">
+        <HeroSection />
+        <BenefitsSection />
+        <CarShowcaseSection />
+
+        {/* 인라인 CTA 배너 */}
+        <section className="bg-primary">
+          <div className="mx-auto max-w-3xl px-4 py-10 text-center md:px-8 md:py-14">
+            <p className="mb-2 text-lg font-bold text-white md:text-xl">
+              지금 상담 신청하면 맞춤 견적을 무료로 보내드립니다
+            </p>
+            <p className="mb-5 text-sm text-white/70">
+              차량 선택부터 계약까지, 전문 상담사가 1:1로 도와드립니다
+            </p>
+            <a href="#consultation-form" className="inline-flex items-center gap-2 rounded-xl bg-accent px-8 py-3.5 text-base font-bold text-white shadow-lg shadow-accent/30 transition-all hover:-translate-y-0.5 hover:shadow-xl">
+              ⚡ 무료 상담 신청하기
+            </a>
+          </div>
+        </section>
+
+        <RentalVsLeaseSection />
+        <ProcessSection />
+        <ConsultationForm />
+        <TrustSection />
+        <FAQSection />
+
+        {/* 페이지 하단 CTA */}
+        {/* 하단 CTA */}
+        <section className="bg-primary">
+          <div className="section-padding pb-24 text-center md:pb-20">
+            <h2 className="mb-3 text-xl font-bold text-white md:text-2xl">아직 고민 중이신가요?</h2>
+            <p className="mb-6 text-sm text-white/70">
+              부담 없이 상담부터 시작하세요. 맞춤 견적은 무료입니다.
+            </p>
+            <a href="#consultation-form" className="inline-flex items-center gap-2 rounded-xl bg-accent px-8 py-4 text-lg font-bold text-white shadow-lg shadow-accent/30 transition-all hover:-translate-y-0.5 hover:shadow-xl">
+              ⚡ 무료 상담 신청하기
+            </a>
+            <p className="mt-6 text-sm text-white/60">
+              전화 문의:{' '}
+              <a href={`tel:${COMPANY.phone}`} className="font-bold text-white underline">
+                {COMPANY.phoneDisplay}
+              </a>
+            </p>
+          </div>
+        </section>
       </main>
-    </div>
+
+      <FloatingButtons />
+    </>
   );
 }
