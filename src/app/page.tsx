@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import HeroSection from '@/components/HeroSection';
 import BenefitsSection from '@/components/BenefitsSection';
 import CarShowcaseSection from '@/components/CarShowcaseSection';
@@ -44,8 +46,8 @@ export default function Home() {
 
       <main className="flex-1">
         <HeroSection />
-        <BenefitsSection />
         <CarShowcaseSection />
+        <BenefitsSection />
 
         {/* 인라인 CTA 배너 */}
         <section className="bg-primary">
@@ -64,7 +66,7 @@ export default function Home() {
 
         <RentalVsLeaseSection />
         <ProcessSection />
-        <ConsultationForm />
+        <Suspense><ConsultationForm /></Suspense>
         <TrustSection />
         <FAQSection />
 

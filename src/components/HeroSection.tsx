@@ -2,77 +2,77 @@ import Link from 'next/link';
 import { HERO } from '@/lib/constants';
 import { cars } from '@/lib/cars';
 
-function badgeClass(badge?: string): string {
-  switch (badge) { case '인기': return 'badge-hot'; case 'NEW': return 'badge-new'; case '특가': return 'badge-deal'; default: return ''; }
-}
-
 export default function HeroSection() {
-  // 인기 차량 3대를 실제 데이터에서 가져옴
-  const topCars = cars
-    .filter((c) => c.badge === '인기')
-    .slice(0, 3);
+  const topCars = cars.filter((c) => c.badge === '인기' || c.badge === 'NEW').slice(0, 4);
 
   return (
-    <section className="relative overflow-hidden bg-surface">
-      <div className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `radial-gradient(circle at 20% 50%, #1b2a4a 1px, transparent 1px),
-            radial-gradient(circle at 80% 30%, #1b2a4a 1px, transparent 1px)`,
-          backgroundSize: '60px 60px, 80px 80px',
-        }}
-      />
+    <section className="relative border-b border-border bg-surface">
+      <div className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-28 lg:px-16">
+        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+          {/* 왼쪽: 텍스트 */}
+          <div>
+            <h1 className="text-4xl font-extrabold leading-[1.08] tracking-tight text-primary md:text-5xl lg:text-6xl">
+              장기렌트,<br />
+              <span className="text-accent">무료 견적</span>으로<br />
+              시작하세요
+            </h1>
+            <p className="mt-5 text-base leading-relaxed text-text-secondary md:text-lg">
+              {HERO.subheadline}
+            </p>
 
-      <div className="relative z-10 section-padding pb-16 md:pb-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <h1 className="animate-fade-up stagger-1 mb-5 text-3xl font-extrabold leading-[1.15] tracking-tight text-primary md:text-4xl lg:text-5xl">
-            {HERO.headline}
-          </h1>
-
-          <p className="animate-fade-up stagger-2 mb-9 text-base text-text-secondary md:text-lg">
-            {HERO.subheadline}
-          </p>
-
-          <div className="animate-fade-up stagger-3 mb-14">
-            <a href="#consultation-form" className="btn-primary text-base px-10 py-4">
-              무료 견적 상담 받기
-            </a>
-          </div>
-
-          <div className="animate-fade-up stagger-4 mb-12 flex justify-center gap-10">
-            {HERO.trustBadges.map((badge) => (
-              <div key={badge.label} className="text-center">
-                <p className="text-2xl font-extrabold text-accent md:text-3xl">{badge.value}</p>
-                <p className="mt-1 text-xs font-medium text-text-muted uppercase tracking-wider">{badge.label}</p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a href="#consultation-form" className="btn-primary text-base px-10 py-4">
+                무료 견적 상담 받기
+              </a>
+              <div className="flex items-center gap-6 border-l border-border pl-6">
+                {HERO.trustBadges.map((b) => (
+                  <div key={b.label}>
+                    <p className="text-xl font-extrabold text-accent">{b.value}</p>
+                    <p className="text-xs text-text-muted">{b.label}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
 
-          {/* 인기 차종 3종 - 실제 차량 데이터 사용 */}
-          <div className="animate-fade-up stagger-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* 오른쪽: 차량 카드 스택 */}
+          <div className="hidden md:block">
+            <div className="space-y-3">
+              {topCars.map((car, i) => (
+                <Link
+                  key={car.slug}
+                  href={`/cars/${car.slug}`}
+                  className={`group flex items-center gap-4 rounded-2xl border border-border bg-surface p-4 transition-all hover:border-accent hover:shadow-md ${
+                    i === 0 ? 'ring-2 ring-accent/20' : ''
+                  }`}
+                >
+                  <div className="flex h-20 w-28 shrink-0 items-center justify-center rounded-xl bg-surface-raised">
+                    <img src={car.image} alt={car.model} className="h-full w-full object-contain p-2" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-text-muted">{car.brand}</p>
+                    <p className="text-base font-bold text-primary truncate">{car.model}</p>
+                    <p className="text-xs text-text-muted truncate">{car.trim}</p>
+                    <p className="mt-1 text-lg font-extrabold text-accent">
+                      월 {(car.baseMonthlyPrice / 10_000).toFixed(0)}만원
+                    </p>
+                  </div>
+                  <span className="text-text-muted group-hover:text-accent group-hover:translate-x-1 transition-all text-xl">→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* 모바일: 가로 스크롤 */}
+          <div className="-mr-5 flex gap-3 overflow-x-auto pb-2 md:hidden">
             {topCars.map((car) => (
-              <Link
-                key={car.slug}
-                href={`/cars/${car.slug}`}
-                className="card group rounded-2xl p-4 text-left"
-              >
-                <div className="relative mb-3 flex h-32 items-center justify-center rounded-xl bg-surface-raised">
-                  <img src={car.image} alt={`${car.brand} ${car.model}`} className="h-full w-full object-contain p-2" />
-                  {car.badge && (
-                    <span className={`absolute left-2 top-2 ${badgeClass(car.badge)}`}>
-                      {car.badge}
-                    </span>
-                  )}
+              <Link key={car.slug} href={`/cars/${car.slug}`}
+                className="w-44 shrink-0 rounded-xl border border-border bg-surface p-3">
+                <div className="mb-2 flex h-24 items-center justify-center rounded-lg bg-surface-raised">
+                  <img src={car.image} alt={car.model} className="h-full w-full object-contain p-2" />
                 </div>
-                <h3 className="text-sm font-bold text-primary group-hover:text-accent transition-colors">
-                  {car.brand} {car.model}
-                </h3>
-                <p className="mt-0.5 text-xs text-text-muted">{car.trim}</p>
-                <p className="mt-2 text-lg font-extrabold text-accent">
-                  월 {(car.baseMonthlyPrice / 10_000).toFixed(0)}만원
-                </p>
-                <p className="mt-0.5 text-[0.6rem] text-text-muted">
-                  {car.year}년형 · {car.fuelType}
-                </p>
+                <p className="text-sm font-bold text-primary">{car.model}</p>
+                <p className="text-lg font-extrabold text-accent">월 {(car.baseMonthlyPrice / 10_000).toFixed(0)}만원</p>
               </Link>
             ))}
           </div>

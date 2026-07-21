@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { NAME_MIN_LENGTH, COMPANY } from '@/lib/constants';
-import type { Car } from '@/lib/cars';
+import type { Car, TrimOption, ColorOption, CarOption } from '@/lib/cars';
 import { submitLead } from '@/components/submitLeadAction';
 import UtmInjector from '@/components/UtmInjector';
 
@@ -17,12 +17,28 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <button type="submit" disabled={pending} className="btn-primary w-full text-sm">
-      {pending ? '처리 중...' : '이 차량으로 상담 신청'}
+      {pending ? '처리 중...' : '이 조건으로 상담 신청'}
     </button>
   );
 }
 
-export default function CarConsultationForm({ car }: { car: Car }) {
+interface Props {
+  car: Car;
+  selectedTrim: TrimOption | null;
+  selectedExColor: ColorOption | null;
+  selectedInColor: ColorOption | null;
+  selectedOptionNames: Set<string>;
+  allOptions: CarOption[];
+}
+
+export default function CarConsultationForm({
+  car,
+  selectedTrim,
+  selectedExColor,
+  selectedInColor,
+  selectedOptionNames,
+  allOptions,
+}: Props) {
   const [state, formAction] = useActionState<FormState, FormData>(submitLead, initialState);
   const phoneRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -36,6 +52,14 @@ export default function CarConsultationForm({ car }: { car: Car }) {
   };
 
   useEffect(() => { if (state.success) formRef.current?.reset(); }, [state.success]);
+
+  const selectedOpts = allOptions.filter((o) => selectedOptionNames.has(o.name));
+  const selectionSummary = [
+    selectedTrim?.name,
+    selectedExColor?.name,
+    selectedInColor?.name,
+    ...selectedOpts.map((o) => o.name),
+  ].filter(Boolean).join(' / ');
 
   if (state.success) {
     return (
@@ -56,9 +80,21 @@ export default function CarConsultationForm({ car }: { car: Car }) {
     <form ref={formRef} action={formAction} noValidate className="space-y-4">
       <UtmInjector />
       <input type="hidden" name="car_slug" value={car.slug} />
+      <input type="hidden" name="car_type" value={selectionSummary} />
 
-      <div className="rounded-lg bg-surface-raised px-4 py-3 text-sm font-medium text-primary">
-        선택 차량: <span className="font-bold">{car.brand} {car.model} {car.trim}</span>
+      <div className="rounded-lg bg-surface-raised px-4 py-3">
+        <div className="text-xs text-text-muted mb-1">선택 차량</div>
+        <div className="text-sm font-bold text-primary">{car.brand} {car.model}</div>
+        {selectedTrim && (
+          <div className="mt-2 space-y-1 text-xs text-text-secondary">
+            <div>▸ 트림: <span className="font-medium">{selectedTrim.name}</span> <span className="text-text-muted">({selectedTrim.price.toLocaleString()}원)</span></div>
+            {selectedExColor && <div>▸ 외장: <span className="font-medium">{selectedExColor.name}</span>{selectedExColor.price > 0 && <span className="text-text-muted"> (+{selectedExColor.price.toLocaleString()})</span>}</div>}
+            {selectedInColor && <div>▸ 내장: <span className="font-medium">{selectedInColor.name}</span></div>}
+            {selectedOpts.length > 0 && (
+              <div>▸ 옵션: <span className="font-medium">{selectedOpts.map((o) => o.name).join(', ')}</span> <span className="text-accent">(+{selectedOpts.reduce((s, o) => s + o.price, 0).toLocaleString()}원)</span></div>
+            )}
+          </div>
+        )}
       </div>
 
       <div>

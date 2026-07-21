@@ -1,0 +1,40 @@
+name: Update Car Data
+
+on:
+  schedule:
+    # 매일 오전 8시 (KST) 실행 — 아마존카 API에서 최신 데이터 수집
+    - cron: '0 23 * * *'  # UTC 23:00 = KST 08:00
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch latest car data from Amazoncar API
+        run: python3 scripts/update-cars.py
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git diff --exit-code src/lib/cars.ts public/images/cars/ || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit & push if changed
+        if: steps.diff.outputs.changes == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add src/lib/cars.ts public/images/cars/
+          git commit -m "🔄 Auto-update car data from Amazoncar API [$(date +%Y-%m-%d)]"
+          git push

@@ -10,7 +10,8 @@ const FUEL_LABELS: Record<Car['fuelType'], string> = {
   전기: '전기',
 };
 
-function badgeClass(badge?: string): string {
+function badgeClass(badge?: string | null): string {
+  if (!badge) return '';
   switch (badge) {
     case '인기': return 'badge-hot';
     case 'NEW': return 'badge-new';
@@ -104,12 +105,41 @@ export default async function CarsPage({ searchParams }: Props) {
     case 'price_asc': filtered.sort((a, b) => a.baseMonthlyPrice - b.baseMonthlyPrice); break;
     case 'price_desc': filtered.sort((a, b) => b.baseMonthlyPrice - a.baseMonthlyPrice); break;
     default:
-      filtered.sort((a, b) => {
-        const badgeOrder: Record<string, number> = { 인기: 1, NEW: 2, 특가: 3 };
-        const ao = badgeOrder[a.badge || ''] || 4;
-        const bo = badgeOrder[b.badge || ''] || 4;
+      // 인기순: 모델별 그룹핑 → 각 그룹 대표 1장 → 나머지 변종
+      const modelKey = (c: Car) => c.model.replace(/^더 뉴 |^The new |^더뉴 /, '').split(' ')[0];
+      const rank = (m: string) => {
+        const r: Record<string, number> = {
+          그랜저: 1, 쏘렌토: 2, 모델Y: 3, 셀토스: 4, 카니발: 5,
+          스포티지: 6, 쏘나타: 7, 아반떼: 8, 팰리세이드: 9, 레이: 10,
+        };
+        return r[m] ?? 99;
+      };
+      const best = (cs: Car[]) => cs.sort((a, b) => a.baseMonthlyPrice - b.baseMonthlyPrice)[0];
+
+      // Group by model key
+      const groups = new Map<string, Car[]>();
+      for (const c of filtered) {
+        const k = modelKey(c);
+        if (!groups.has(k)) groups.set(k, []);
+        groups.get(k)!.push(c);
+      }
+
+      // Sort groups by rank of best variant
+      const sorted = [...groups.entries()].sort(([a], [b]) => {
+        const ra = rank(a); const rb = rank(b);
+        if (ra !== rb) return ra - rb;
+        const ca = best(groups.get(a)!); const cb = best(groups.get(b)!);
+        const badgeOrder: Record<string, number> = { '인기': 11, 'NEW': 12, '특가': 13 };
+        const ao = badgeOrder[ca.badge || ''] || 20;
+        const bo = badgeOrder[cb.badge || ''] || 20;
         if (ao !== bo) return ao - bo;
-        return a.baseMonthlyPrice - b.baseMonthlyPrice;
+        return ca.baseMonthlyPrice - cb.baseMonthlyPrice;
+      });
+
+      // Flatten: best variant first, then rest of group
+      filtered = sorted.flatMap(([_, cs]) => {
+        const b = best(cs);
+        return [b, ...cs.filter(c => c !== b).sort((x, y) => x.baseMonthlyPrice - y.baseMonthlyPrice)];
       });
   }
 
