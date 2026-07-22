@@ -15,6 +15,7 @@ async function setupDb() {
       customer_type TEXT,
       preferred_period TEXT,
       car_slug TEXT,
+      kakao_id TEXT,
       utm_source TEXT,
       utm_campaign TEXT,
       utm_medium TEXT,
@@ -23,6 +24,11 @@ async function setupDb() {
       status TEXT DEFAULT 'new'
     )
   `;
+
+  // Migration: add kakao_id to existing tables
+  try {
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS kakao_id TEXT`;
+  } catch { /* column already exists */ }
 
   console.log('Database setup complete: leads table ready.');
   process.exit(0);
