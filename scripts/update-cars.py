@@ -351,19 +351,18 @@ export const cars: Car[] = [
 {','.join(entries)}
 ];
 
-// ── Filters ──
 // ── Filter sort: 산업통상부 2026.06 내수 판매 + 시장 인지도 기준 ──
-const BRAND_RANK: Record<string, number> = {
+const BRAND_RANK: Record<string, number> = {{
   현대: 1, 기아: 2, 테슬라: 3, BMW: 4, 벤츠: 5, BYD: 6,
   제네시스: 7, KGM: 8, 르노코리아: 9, 한국지엠: 10,
   아우디: 11, 폭스바겐: 12, 렉서스: 13, 볼보: 14, 도요타: 15,
-};
-const TYPE_RANK: Record<string, number> = {
+}};
+const TYPE_RANK: Record<string, number> = {{
   SUV: 1, 중형: 2, 대형: 3, 경소형: 4, 승합: 5,
-};
-const FUEL_RANK: Record<string, number> = {
+}};
+const FUEL_RANK: Record<string, number> = {{
   하이브리드: 1, 가솔린: 2, 전기: 3, LPG: 4, 디젤: 5,
-};
+}};
 
 export const ALL_BRANDS = [...new Set(cars.map((c) => c.brand))].sort((a, b) =>
   (BRAND_RANK[a] ?? 99) - (BRAND_RANK[b] ?? 99)
