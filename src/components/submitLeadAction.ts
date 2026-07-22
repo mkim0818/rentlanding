@@ -46,6 +46,7 @@ export async function submitLead(
         name, phone, carType, customerType, preferredPeriod,
         budget, contractPeriod, contactMethod, carSlug, kakaoId,
         utmSource, utmMedium, utmCampaign,
+        secret: process.env.GOOGLE_SHEETS_SECRET || 'rentlead-2026-secret',
       }),
       headers: { 'Content-Type': 'application/json' },
     });

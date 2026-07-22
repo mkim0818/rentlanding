@@ -1,44 +1,28 @@
-/**
- * Google Sheets 연동 — Google Apps Script
- *
- * 설정:
- * 1. Google Sheets 새로 만들기
- * 2. 확장 프로그램 > Apps Script 열기
- * 3. 아래 코드 붙여넣고 저장
- * 4. 배포 > 새 배포 > 웹 앱 (액세스 권한: "모든 사용자")
- * 5. 생성된 URL을 GOOGLE_SHEETS_URL 환경변수에 등록
- *
- * 시트 첫 행(헤더):
- *   이름 | 연락처 | 차량 | 고객유형 | 희망시기 | 예산 | 기간 | 상담방식 | 카카오ID | UTM | 등록일시
- */
-
 const SHEET_NAME = '리드';
+const SECRET = 'rentlead-2026-secret'; // ← 원하는 비밀키로 변경
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['이름','연락처','차량','고객유형','희망시기','예산','기간','상담방식','카카오ID','UTM소스','UTM매체','UTM캠페인','등록일시']);
+    
+    // 비밀키 검증
+    if (data.secret !== SECRET) {
+      return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'unauthorized' }))
+        .setMimeType(ContentService.MimeType.JSON);
     }
 
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['이름','연락처','차량','고객유형','희망시기','예산','기간','상담방식','카카오ID','UTM소스','등록일시']);
+    }
     sheet.appendRow([
-      data.name || '',
-      data.phone || '',
-      data.carType || '',
-      data.customerType || '',
-      data.preferredPeriod || '',
-      data.budget || '',
-      data.contractPeriod || '',
-      data.contactMethod || '',
-      data.kakaoId || '',
+      data.name || '', data.phone || '', data.carType || '',
+      data.customerType || '', data.preferredPeriod || '',
+      data.budget || '', data.contractPeriod || '',
+      data.contactMethod || '', data.kakaoId || '',
       data.utmSource || '',
-      data.utmMedium || '',
-      data.utmCampaign || '',
       new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
     ]);
-
     return ContentService.createTextOutput(JSON.stringify({ ok: true }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (e) {
