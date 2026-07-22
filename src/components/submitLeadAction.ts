@@ -26,6 +26,7 @@ export async function submitLead(
   const customerType = formData.get('customer_type')?.toString().trim() || null;
   const preferredPeriod = formData.get('preferred_period')?.toString().trim() || null;
   const carSlug = formData.get('car_slug')?.toString().trim() || null;
+  const kakaoId = formData.get('kakao_id')?.toString().trim() || null;
   const agree = formData.get('agree') === 'on';
   const utmSource = formData.get('utm_source')?.toString().trim() || null;
   const utmMedium = formData.get('utm_medium')?.toString().trim() || null;
@@ -50,8 +51,8 @@ export async function submitLead(
 
   try {
     await sql`
-      INSERT INTO leads (name, phone, car_type, budget, contract_period, contact_method, customer_type, preferred_period, car_slug, utm_source, utm_medium, utm_campaign, utm_term)
-      VALUES (${name}, ${phone}, ${carType}, ${budget}, ${contractPeriod}, ${contactMethod}, ${customerType}, ${preferredPeriod}, ${carSlug}, ${utmSource}, ${utmMedium}, ${utmCampaign}, ${utmTerm})
+      INSERT INTO leads (name, phone, car_type, budget, contract_period, contact_method, customer_type, preferred_period, car_slug, kakao_id, utm_source, utm_medium, utm_campaign, utm_term)
+      VALUES (${name}, ${phone}, ${carType}, ${budget}, ${contractPeriod}, ${contactMethod}, ${customerType}, ${preferredPeriod}, ${carSlug}, ${kakaoId}, ${utmSource}, ${utmMedium}, ${utmCampaign}, ${utmTerm})
     `;
 
     // Google Sheets 연동 (비동기, 실패해도 에러 안 냄)

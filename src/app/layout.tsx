@@ -26,6 +26,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet" />
         <link rel="stylesheet" as="style" crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+        <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js" 
+          integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTXkJTn0I9sShLSp3bbtD31G+huQhbNg9H9tVz3Uj" crossOrigin="anonymous"></script>
       </head>
       <body className="min-h-screen flex flex-col">
         <Header />

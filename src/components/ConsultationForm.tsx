@@ -8,6 +8,8 @@ import { cars } from '@/lib/cars';
 import { submitLead } from './submitLeadAction';
 import UtmInjector from './UtmInjector';
 
+declare global { interface Window { Kakao: any; } }
+
 type FormState = { success: boolean; message: string; errors?: { name?: string; phone?: string; agree?: string } };
 const init: FormState = { success: false, message: '' };
 
@@ -47,13 +49,63 @@ function CarInfo({ car }: { car: typeof cars[number] }) {
 
 /* ── 빠른 상담 폼 ─────────────────────────────── */
 function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[number] | null }) {
-  const [state, formAction] = useActionState<FormState, FormData>(submitLead, init);
-  const phoneRef = useRef<HTMLInputElement>(null);
+  const [kakaoUser, setKakaoUser] = useState<{nickname:string;email:string;id:number}|null>(null);
+  const [pendingForm, setPendingForm] = useState<HTMLFormElement | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  
+  // Init Kakao SDK
+  useEffect(() => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+    }
+  }, []);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    if (!kakaoUser) {
+      e.preventDefault();
+      setPendingForm(e.currentTarget);
+      if (!window.Kakao.isInitialized()) window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+      window.Kakao.Auth.login({
+        success: (authObj: any) => {
+          window.Kakao.API.request({
+            url: '/v2/user/me',
+            success: (res: any) => {
+              setKakaoUser({
+                nickname: res.kakao_account?.profile?.nickname || res.properties?.nickname || '',
+                email: res.kakao_account?.email || '',
+                id: res.id,
+              });
+            },
+          });
+        },
+      });
+      return;
+    }
+    // Already logged in — submit normally (form action handles it)
+  }
+
+  // Auto-submit after Kakao login completes
+  useEffect(() => {
+    if (kakaoUser && pendingForm) {
+      const form = pendingForm;
+      setPendingForm(null);
+      // Add kakao_id hidden input
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'kakao_id';
+      input.value = '' + kakaoUser.id;
+      form.appendChild(input);
+      form.requestSubmit();
+    }
+  }, [kakaoUser, pendingForm]);
+
+  // Use form action for server submission
+  const [state, formAction] = useActionState<FormState, FormData>(submitLead, init);
+
   useEffect(() => { if (state.success) formRef.current?.reset(); }, [state.success]);
   if (state.success) return <SuccessScreen />;
 
-  return <form ref={formRef} action={formAction} noValidate className="space-y-4">
+  return <form ref={formRef} action={formAction} onSubmit={handleSubmit} noValidate className="space-y-4">
     <UtmInjector />
     {carSlug && <input type="hidden" name="car_slug" value={carSlug} />}
     {car ? <CarInfo car={car} /> : null}
@@ -65,7 +117,7 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
     </div>
     <div>
       <label htmlFor="phone" className="mb-1 block text-sm font-bold text-primary">연락처 *</label>
-      <PhoneInput phoneRef={phoneRef} />
+      <PhoneInput phoneRef={null as any} />
       {state.errors?.phone && <p className="mt-1 text-xs text-error">{state.errors.phone}</p>}
     </div>
     <label className="flex items-start gap-2 cursor-pointer">
@@ -73,20 +125,63 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
       <span className="text-xs text-text-secondary">개인정보 수집·이용 동의 *</span>
     </label>
     {state.errors?.agree && <p className="mt-1 text-xs text-error">{state.errors.agree}</p>}
-    <SubmitBtn label="빠른 상담 신청" />
+    <button type="submit" className="btn-primary w-full text-base flex items-center justify-center gap-2">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="currentColor" d="M9 0C4.03 0 0 3.127 0 6.986c0 2.465 1.624 4.63 4.07 5.862l-1.03 3.786c-.058.215.188.39.379.27l4.578-3.036c.328.046.662.07 1.003.07 4.97 0 9-3.127 9-6.986C18 3.127 13.97 0 9 0z"/></svg>
+      카카오로 빠른 상담 신청
+    </button>
     {state.message && !state.success && <p className="text-center text-sm text-error">{state.message}</p>}
   </form>;
 }
 
 /* ── 상세 상담 폼 ─────────────────────────────── */
 function DetailedForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[number] | null }) {
-  const [state, formAction] = useActionState<FormState, FormData>(submitLead, init);
-  const phoneRef = useRef<HTMLInputElement>(null);
+  const [kakaoUser, setKakaoUser] = useState<{nickname:string;email:string;id:number}|null>(null);
+  const [pendingForm, setPendingForm] = useState<HTMLFormElement | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  
+  useEffect(() => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+    }
+  }, []);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    if (!kakaoUser) {
+      e.preventDefault();
+      setPendingForm(e.currentTarget);
+      if (!window.Kakao.isInitialized()) window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+      window.Kakao.Auth.login({
+        success: () => {
+          window.Kakao.API.request({
+            url: '/v2/user/me',
+            success: (res: any) => setKakaoUser({
+              nickname: res.kakao_account?.profile?.nickname || res.properties?.nickname || '',
+              email: res.kakao_account?.email || '',
+              id: res.id,
+            }),
+          });
+        },
+      });
+      return;
+    }
+  }
+
+  useEffect(() => {
+    if (kakaoUser && pendingForm) {
+      const form = pendingForm;
+      setPendingForm(null);
+      const input = document.createElement('input');
+      input.type = 'hidden'; input.name = 'kakao_id'; input.value = '' + kakaoUser.id;
+      form.appendChild(input);
+      form.requestSubmit();
+    }
+  }, [kakaoUser, pendingForm]);
+
+  const [state, formAction] = useActionState<FormState, FormData>(submitLead, init);
   useEffect(() => { if (state.success) formRef.current?.reset(); }, [state.success]);
   if (state.success) return <SuccessScreen />;
 
-  return <form ref={formRef} action={formAction} noValidate className="space-y-4">
+  return <form ref={formRef} action={formAction} onSubmit={handleSubmit} noValidate className="space-y-4">
     <UtmInjector />
     {carSlug && <input type="hidden" name="car_slug" value={carSlug} />}
     {car ? <CarInfo car={car} /> : (
@@ -100,12 +195,13 @@ function DetailedForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[nu
     <div>
       <label htmlFor="name" className="mb-1 block text-sm font-bold text-primary">이름 *</label>
       <input id="name" name="name" type="text" required minLength={NAME_MIN_LENGTH} placeholder="이름을 입력하세요"
+        defaultValue={kakaoUser?.nickname || ''}
         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none" />
       {state.errors?.name && <p className="mt-1 text-xs text-error">{state.errors.name}</p>}
     </div>
     <div>
       <label htmlFor="phone" className="mb-1 block text-sm font-bold text-primary">연락처 *</label>
-      <PhoneInput phoneRef={phoneRef} />
+      <PhoneInput phoneRef={null as any} />
       {state.errors?.phone && <p className="mt-1 text-xs text-error">{state.errors.phone}</p>}
     </div>
     <div>
@@ -158,7 +254,10 @@ function DetailedForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[nu
       <span className="text-xs text-text-secondary">개인정보 수집·이용 동의 *</span>
     </label>
     {state.errors?.agree && <p className="mt-1 text-xs text-error">{state.errors.agree}</p>}
-    <SubmitBtn label="상세 견적 신청" />
+    <button type="submit" className="btn-primary w-full text-base flex items-center justify-center gap-2">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="currentColor" d="M9 0C4.03 0 0 3.127 0 6.986c0 2.465 1.624 4.63 4.07 5.862l-1.03 3.786c-.058.215.188.39.379.27l4.578-3.036c.328.046.662.07 1.003.07 4.97 0 9-3.127 9-6.986C18 3.127 13.97 0 9 0z"/></svg>
+      카카오로 상세 견적 신청
+    </button>
     {state.message && !state.success && <p className="text-center text-sm text-error">{state.message}</p>}
   </form>;
 }
@@ -176,7 +275,7 @@ export default function ConsultationForm({ carSlug: propSlug }: { carSlug?: stri
       <div className="section-padding">
         <div className="mx-auto max-w-md">
           <h2 className="mb-2 text-center text-2xl font-extrabold text-primary md:text-3xl">무료 견적 상담 신청</h2>
-          <p className="mb-8 text-center text-sm text-text-muted">부담 없이 상담부터 시작하세요</p>
+          <p className="mb-8 text-center text-sm text-text-muted">카카오 로그인으로 간편하게 신청하세요</p>
 
           <div className="mb-6 flex gap-3">
             <button type="button" onClick={() => setTab('quick')}
