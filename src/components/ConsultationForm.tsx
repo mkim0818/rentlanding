@@ -115,7 +115,7 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
       {state.errors?.phone && <p className="mt-1 text-xs text-error">{state.errors.phone}</p>}
     </div>
     <label className="flex items-start gap-2 cursor-pointer">
-      <input type="checkbox" name="agree" required className="mt-0.5 h-4 w-4 accent-accent" />
+      <input type="checkbox" name="agree" required defaultChecked className="mt-0.5 h-4 w-4 accent-accent" />
       <span className="text-xs text-text-secondary">개인정보 수집·이용 동의 *</span>
     </label>
     {state.errors?.agree && <p className="mt-1 text-xs text-error">{state.errors.agree}</p>}
@@ -274,7 +274,7 @@ function DetailedForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[nu
       </div>
     </div>
     <label className="flex items-start gap-2 cursor-pointer">
-      <input type="checkbox" name="agree" required className="mt-0.5 h-4 w-4 accent-accent" />
+      <input type="checkbox" name="agree" required defaultChecked className="mt-0.5 h-4 w-4 accent-accent" />
       <span className="text-xs text-text-secondary">개인정보 수집·이용 동의 *</span>
     </label>
     {state.errors?.agree && <p className="mt-1 text-xs text-error">{state.errors.agree}</p>}

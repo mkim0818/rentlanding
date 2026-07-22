@@ -54,6 +54,7 @@ export default function CarConsultationForm({
   useEffect(() => { if (state.success) formRef.current?.reset(); }, [state.success]);
 
   const selectedOpts = allOptions.filter((o) => selectedOptionNames.has(o.name));
+  const optionsStr = selectedOpts.map((o) => o.name).join(', ');
   const selectionSummary = [
     selectedTrim?.name,
     selectedExColor?.name,
@@ -82,6 +83,10 @@ export default function CarConsultationForm({
       <input type="hidden" name="car_slug" value={car.slug} />
       <input type="hidden" name="car_type" value={selectionSummary} />
       <input type="hidden" name="car_model" value={`${car.brand} ${car.model}`} />
+      <input type="hidden" name="car_trim" value={selectedTrim?.name || car.trim} />
+      <input type="hidden" name="car_options" value={optionsStr} />
+      <input type="hidden" name="car_exterior_color" value={selectedExColor?.name || ''} />
+      <input type="hidden" name="car_interior_color" value={selectedInColor?.name || ''} />
 
       <div className="rounded-lg bg-surface-raised px-4 py-3">
         <div className="text-xs text-text-muted mb-1">선택 차량</div>
@@ -168,7 +173,7 @@ export default function CarConsultationForm({
 
       <div>
         <label className="flex items-start gap-2 cursor-pointer">
-          <input type="checkbox" name="agree" required className="mt-0.5 h-4 w-4 accent-accent" />
+          <input type="checkbox" name="agree" required defaultChecked className="mt-0.5 h-4 w-4 accent-accent" />
           <span className="text-xs text-text-secondary">
             개인정보 수집·이용에 동의합니다. * <span className="text-text-muted">(상담 목적으로만 사용)</span>
           </span>

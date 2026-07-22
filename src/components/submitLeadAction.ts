@@ -22,6 +22,10 @@ export async function submitLead(
   const preferredPeriod = formData.get('preferred_period')?.toString().trim() || null;
   const carSlug = formData.get('car_slug')?.toString().trim() || null;
   const carModel = formData.get('car_model')?.toString().trim() || null;
+  const carTrim = formData.get('car_trim')?.toString().trim() || null;
+  const carOptions = formData.get('car_options')?.toString().trim() || null;
+  const carExteriorColor = formData.get('car_exterior_color')?.toString().trim() || null;
+  const carInteriorColor = formData.get('car_interior_color')?.toString().trim() || null;
   const kakaoId = formData.get('kakao_id')?.toString().trim() || null;
   const immediateDelivery = formData.get('immediate_delivery')?.toString().trim() || null;
   const additionalItems = formData.getAll('additional_items').filter(Boolean).join(',') || null;
@@ -46,7 +50,9 @@ export async function submitLead(
     const res = await fetch(sheetsUrl, {
       method: 'POST',
       body: JSON.stringify({
-        name, phone, carType, carModel, customerType, preferredPeriod,
+        name, phone, carType, carModel, carTrim, carOptions,
+        carExteriorColor, carInteriorColor,
+        customerType, preferredPeriod,
         budget, contractPeriod, contactMethod, carSlug, kakaoId,
         immediateDelivery, additionalItems,
         utmSource, utmMedium, utmCampaign,
