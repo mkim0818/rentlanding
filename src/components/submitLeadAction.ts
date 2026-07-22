@@ -1,16 +1,11 @@
 'use server';
 
-import { sql } from '@/lib/db';
 import { PHONE_REGEX, NAME_MIN_LENGTH } from '@/lib/constants';
 
 export type FormState = {
   success: boolean;
   message: string;
-  errors?: {
-    name?: string;
-    phone?: string;
-    agree?: string;
-  };
+  errors?: { name?: string; phone?: string; agree?: string };
 };
 
 export async function submitLead(
@@ -31,46 +26,33 @@ export async function submitLead(
   const utmSource = formData.get('utm_source')?.toString().trim() || null;
   const utmMedium = formData.get('utm_medium')?.toString().trim() || null;
   const utmCampaign = formData.get('utm_campaign')?.toString().trim() || null;
-  const utmTerm = formData.get('utm_term')?.toString().trim() || null;
 
-  // 서버 측 유효성 검사
-  const errors: NonNullable<FormState['errors']> = {};
-  if (!name || name.length < NAME_MIN_LENGTH) {
-    errors.name = `이름을 ${NAME_MIN_LENGTH}글자 이상 입력해주세요`;
-  }
-  if (!phone || !PHONE_REGEX.test(phone)) {
-    errors.phone = '올바른 전화번호 형식으로 입력해주세요 (예: 010-1234-5678)';
-  }
-  if (!agree) {
-    errors.agree = '개인정보 수집·이용에 동의해주세요';
-  }
+  const errors: FormState['errors'] = {};
+  if (!name || name.length < NAME_MIN_LENGTH) errors.name = `이름을 ${NAME_MIN_LENGTH}자 이상 입력해주세요`;
+  if (!phone || !PHONE_REGEX.test(phone)) errors.phone = '올바른 연락처를 입력해주세요';
+  if (!agree) errors.agree = '개인정보 수집·이용에 동의해주세요';
+  if (Object.keys(errors).length > 0) return { success: false, message: '', errors };
 
-  if (Object.keys(errors).length > 0) {
-    return { success: false, message: '입력값을 확인해주세요', errors };
+  // Send to Google Sheets
+  const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
+  if (!sheetsUrl) {
+    return { success: false, message: '시스템 설정이 완료되지 않았습니다. 전화로 문의해주세요.' };
   }
 
   try {
-    await sql`
-      INSERT INTO leads (name, phone, car_type, budget, contract_period, contact_method, customer_type, preferred_period, car_slug, kakao_id, utm_source, utm_medium, utm_campaign, utm_term)
-      VALUES (${name}, ${phone}, ${carType}, ${budget}, ${contractPeriod}, ${contactMethod}, ${customerType}, ${preferredPeriod}, ${carSlug}, ${kakaoId}, ${utmSource}, ${utmMedium}, ${utmCampaign}, ${utmTerm})
-    `;
-
-    // Google Sheets 연동 (비동기, 실패해도 에러 안 냄)
-    const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
-    if (sheetsUrl) {
-      fetch(sheetsUrl, {
-        method: 'POST',
-        body: JSON.stringify({ name, phone, carType, customerType, preferredPeriod, utmSource }),
-        headers: { 'Content-Type': 'application/json' },
-      }).catch(() => {}); // silently ignore sheets errors
-    }
+    const res = await fetch(sheetsUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        name, phone, carType, customerType, preferredPeriod,
+        budget, contractPeriod, contactMethod, carSlug, kakaoId,
+        utmSource, utmMedium, utmCampaign,
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!res.ok) throw new Error('Sheets API failed');
 
     return { success: true, message: '' };
-  } catch (err) {
-    console.error('Lead submission error:', err);
-    return {
-      success: false,
-      message: '일시적인 오류가 발생했습니다.',
-    };
+  } catch {
+    return { success: false, message: '일시적인 오류가 발생했습니다.' };
   }
 }

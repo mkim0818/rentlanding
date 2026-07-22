@@ -56,14 +56,7 @@ API 주소 변경 시: `AMAZONCAR_API_URL` 환경변수 설정
 - **depositDiscount**: 보증금 × 0.00513
 - 계약기간(24~72개월), 주행거리(1만~4만km), 보증금(0~30%) 조정 가능
 
-## DB
-
-`src/lib/setup-db.ts` 실행으로 `leads` 테이블 생성:
-```bash
-npx tsx src/lib/setup-db.ts
-```
-
-## 디자인 시스템
+## 폼 / 리드
 
 - **테마**: Clean Signal — 오프화이트(`#f9f7f4`) + 차콜(`#1f1f1f`) + 코랄 액센트(`#e85d3a`)
 - **폰트**: Pretendard (CDN)
@@ -72,10 +65,9 @@ npx tsx src/lib/setup-db.ts
 
 | 변수 | 용도 |
 |------|------|
-| `POSTGRES_URL` | Vercel Postgres 연결 |
+| `GOOGLE_SHEETS_URL` | Google Sheets Apps Script URL (리드 저장) |
 | `AMAZONCAR_API_URL` | 아마존카 API 주소 |
-| `GOOGLE_SHEETS_URL` | Google Sheets Apps Script URL (리드 자동 기록) |
-| `ADMIN_PASSWORD` | 어드민 페이지 비밀번호 (기본값: `admin123`) |
+| `NEXT_PUBLIC_KAKAO_JS_KEY` | 카카오 로그인 JavaScript 키 |
 
 ## 회사 정보
 
