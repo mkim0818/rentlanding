@@ -1,11 +1,40 @@
 import Link from 'next/link';
 import { cars, type Car } from '@/lib/cars';
 
-export default function CarShowcaseSection() {
-  const showcase = cars.filter((c) => c.badge === '인기' || c.badge === 'NEW').slice(0, 3);
-  const others = cars.filter((c) => !showcase.includes(c)).sort((a, b) => a.baseMonthlyPrice - b.baseMonthlyPrice).slice(0, 3);
-  const display = [...showcase, ...others].slice(0, 6);
+// 인기순: 모델별 그룹핑 → 판매실적 top6 → (인기배지) → 가격
+const modelKey = (c: Car) => c.model.replace(/^더 뉴 |^The new |^더뉴 /, '').split(' ')[0];
+const rank = (m: string) => {
+  const r: Record<string, number> = {
+    그랜저: 1, 쏘렌토: 2, 모델Y: 3, 셀토스: 4, 카니발: 5,
+    스포티지: 6, 쏘나타: 7, 아반떼: 8, 팰리세이드: 9, 레이: 10,
+  };
+  return r[m] ?? 99;
+};
 
+const bestOf = (cs: Car[]) =>
+  cs.sort((a, b) => {
+    const badgeOrder: Record<string, number> = { '인기': 1, 'NEW': 2, '특가': 3 };
+    const ao = badgeOrder[a.badge || ''] || 20;
+    const bo = badgeOrder[b.badge || ''] || 20;
+    if (ao !== bo) return ao - bo;
+    return a.baseMonthlyPrice - b.baseMonthlyPrice;
+  })[0];
+
+// Deduplicate: one best car per model, sorted by popularity
+const groups = new Map<string, Car[]>();
+for (const c of cars) {
+  const k = modelKey(c);
+  if (!groups.has(k)) groups.set(k, []);
+  groups.get(k)!.push(c);
+}
+const showcase = [...groups.entries()]
+  .sort(([a], [b]) => rank(a) - rank(b))
+  .map(([_, cs]) => bestOf(cs))
+  .slice(0, 6);
+// Filter same-model duplicates just in case
+const display = showcase.filter((c, i) => showcase.findIndex(x => modelKey(x) === modelKey(c)) === i).slice(0, 6);
+
+export default function CarShowcaseSection() {
   return (
     <section>
       <div className="section-padding">
