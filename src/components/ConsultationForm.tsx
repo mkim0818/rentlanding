@@ -53,7 +53,6 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
   const [pendingForm, setPendingForm] = useState<HTMLFormElement | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   
-  // Init Kakao SDK
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
@@ -66,42 +65,36 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
       setPendingForm(e.currentTarget);
       if (!window.Kakao.isInitialized()) window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
       window.Kakao.Auth.login({
-        success: (authObj: any) => {
+        success: () => {
           window.Kakao.API.request({
             url: '/v2/user/me',
-            success: (res: any) => {
-              setKakaoUser({
-                nickname: res.kakao_account?.profile?.nickname || res.properties?.nickname || '',
-                email: res.kakao_account?.email || '',
-                id: res.id,
-              });
-            },
+            success: (res: any) => setKakaoUser({
+              nickname: res.kakao_account?.profile?.nickname || res.properties?.nickname || '',
+              email: res.kakao_account?.email || '',
+              id: res.id,
+            }),
           });
         },
       });
       return;
     }
-    // Already logged in — submit normally (form action handles it)
   }
 
-  // Auto-submit after Kakao login completes
   useEffect(() => {
     if (kakaoUser && pendingForm) {
       const form = pendingForm;
       setPendingForm(null);
-      // Add kakao_id hidden input
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'kakao_id';
-      input.value = '' + kakaoUser.id;
-      form.appendChild(input);
+      const idInput = document.createElement('input');
+      idInput.type = 'hidden'; idInput.name = 'kakao_id'; idInput.value = '' + kakaoUser.id;
+      form.appendChild(idInput);
+      const nameInput = document.createElement('input');
+      nameInput.type = 'hidden'; nameInput.name = 'name'; nameInput.value = kakaoUser.nickname;
+      form.appendChild(nameInput);
       form.requestSubmit();
     }
   }, [kakaoUser, pendingForm]);
 
-  // Use form action for server submission
   const [state, formAction] = useActionState<FormState, FormData>(submitLead, init);
-
   useEffect(() => { if (state.success) formRef.current?.reset(); }, [state.success]);
   if (state.success) return <SuccessScreen />;
 
@@ -110,14 +103,15 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
     {carSlug && <input type="hidden" name="car_slug" value={carSlug} />}
     {car ? <CarInfo car={car} /> : null}
     <div>
-      <label htmlFor="name" className="mb-1 block text-sm font-bold text-primary">이름 *</label>
-      <input id="name" name="name" type="text" required minLength={NAME_MIN_LENGTH} placeholder="이름을 입력하세요"
+      <label htmlFor="phone" className="mb-1 block text-sm font-bold text-primary">연락처</label>
+      <input id="phone" name="phone" type="tel" required placeholder="010-0000-0000" onInput={(h) => {
+        const e = h.currentTarget;
+        const v = e.value.replace(/[^0-9]/g, '');
+        if (v.length <= 3) e.value = v;
+        else if (v.length <= 7) e.value = `${v.slice(0,3)}-${v.slice(3)}`;
+        else e.value = `${v.slice(0,3)}-${v.slice(3,7)}-${v.slice(7,11)}`;
+      }}
         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none" />
-      {state.errors?.name && <p className="mt-1 text-xs text-error">{state.errors.name}</p>}
-    </div>
-    <div>
-      <label htmlFor="phone" className="mb-1 block text-sm font-bold text-primary">연락처 *</label>
-      <PhoneInput phoneRef={null as any} />
       {state.errors?.phone && <p className="mt-1 text-xs text-error">{state.errors.phone}</p>}
     </div>
     <label className="flex items-start gap-2 cursor-pointer">
@@ -127,8 +121,9 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
     {state.errors?.agree && <p className="mt-1 text-xs text-error">{state.errors.agree}</p>}
     <button type="submit" className="btn-primary w-full text-base flex items-center justify-center gap-2">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="currentColor" d="M9 0C4.03 0 0 3.127 0 6.986c0 2.465 1.624 4.63 4.07 5.862l-1.03 3.786c-.058.215.188.39.379.27l4.578-3.036c.328.046.662.07 1.003.07 4.97 0 9-3.127 9-6.986C18 3.127 13.97 0 9 0z"/></svg>
-      카카오로 빠른 상담 신청
+      카카오로 간편 상담 신청
     </button>
+    <p className="text-[0.6rem] text-text-muted text-center">이름은 카카오 프로필에서 자동 수집됩니다</p>
     {state.message && !state.success && <p className="text-center text-sm text-error">{state.message}</p>}
   </form>;
 }
@@ -170,9 +165,12 @@ function DetailedForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[nu
     if (kakaoUser && pendingForm) {
       const form = pendingForm;
       setPendingForm(null);
-      const input = document.createElement('input');
-      input.type = 'hidden'; input.name = 'kakao_id'; input.value = '' + kakaoUser.id;
-      form.appendChild(input);
+      const idInput = document.createElement('input');
+      idInput.type = 'hidden'; idInput.name = 'kakao_id'; idInput.value = '' + kakaoUser.id;
+      form.appendChild(idInput);
+      const nameInput = document.createElement('input');
+      nameInput.type = 'hidden'; nameInput.name = 'name'; nameInput.value = kakaoUser.nickname;
+      form.appendChild(nameInput);
       form.requestSubmit();
     }
   }, [kakaoUser, pendingForm]);
@@ -193,15 +191,15 @@ function DetailedForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[nu
       </div>
     )}
     <div>
-      <label htmlFor="name" className="mb-1 block text-sm font-bold text-primary">이름 *</label>
-      <input id="name" name="name" type="text" required minLength={NAME_MIN_LENGTH} placeholder="이름을 입력하세요"
-        defaultValue={kakaoUser?.nickname || ''}
+      <label htmlFor="phone" className="mb-1 block text-sm font-bold text-primary">연락처</label>
+      <input id="phone" name="phone" type="tel" required placeholder="010-0000-0000" onInput={(h) => {
+        const e = h.currentTarget;
+        const v = e.value.replace(/[^0-9]/g, '');
+        if (v.length <= 3) e.value = v;
+        else if (v.length <= 7) e.value = `${v.slice(0,3)}-${v.slice(3)}`;
+        else e.value = `${v.slice(0,3)}-${v.slice(3,7)}-${v.slice(7,11)}`;
+      }}
         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none" />
-      {state.errors?.name && <p className="mt-1 text-xs text-error">{state.errors.name}</p>}
-    </div>
-    <div>
-      <label htmlFor="phone" className="mb-1 block text-sm font-bold text-primary">연락처 *</label>
-      <PhoneInput phoneRef={null as any} />
       {state.errors?.phone && <p className="mt-1 text-xs text-error">{state.errors.phone}</p>}
     </div>
     <div>
