@@ -54,6 +54,16 @@ export async function submitLead(
       VALUES (${name}, ${phone}, ${carType}, ${budget}, ${contractPeriod}, ${contactMethod}, ${customerType}, ${preferredPeriod}, ${carSlug}, ${utmSource}, ${utmMedium}, ${utmCampaign}, ${utmTerm})
     `;
 
+    // Google Sheets 연동 (비동기, 실패해도 에러 안 냄)
+    const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
+    if (sheetsUrl) {
+      fetch(sheetsUrl, {
+        method: 'POST',
+        body: JSON.stringify({ name, phone, carType, customerType, preferredPeriod, utmSource }),
+        headers: { 'Content-Type': 'application/json' },
+      }).catch(() => {}); // silently ignore sheets errors
+    }
+
     return { success: true, message: '' };
   } catch (err) {
     console.error('Lead submission error:', err);

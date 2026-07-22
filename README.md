@@ -73,7 +73,9 @@ npx tsx src/lib/setup-db.ts
 | 변수 | 용도 |
 |------|------|
 | `POSTGRES_URL` | Vercel Postgres 연결 |
-| `AMAZONCAR_API_URL` | 아마존카 API 주소 (기본값: `https://api.amazoncar.co.kr/api`) |
+| `AMAZONCAR_API_URL` | 아마존카 API 주소 |
+| `GOOGLE_SHEETS_URL` | Google Sheets Apps Script URL (리드 자동 기록) |
+| `ADMIN_PASSWORD` | 어드민 페이지 비밀번호 (기본값: `admin123`) |
 
 ## 회사 정보
 
