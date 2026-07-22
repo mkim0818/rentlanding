@@ -73,3 +73,4 @@ npx tsx src/lib/setup-db.ts
 npx vercel          # 프리뷰
 npx vercel --prod   # 프로덕션
 ```
+
