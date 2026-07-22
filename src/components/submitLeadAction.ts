@@ -50,7 +50,8 @@ export async function submitLead(
       }),
       headers: { 'Content-Type': 'application/json' },
     });
-    if (!res.ok) throw new Error('Sheets API failed');
+    const result = await res.json();
+    if (!result.ok) throw new Error('Sheets API failed');
 
     return { success: true, message: '' };
   } catch {
