@@ -10,9 +10,7 @@ function fmtMonthly(w: number) {
   return chun > 0 ? `${man.toLocaleString()}만 ${chun}천원` : `${man.toLocaleString()}만원`;
 }
 
-const TERMS = [24, 36, 48, 60, 72];
 const MILEAGES = [10_000, 15_000, 20_000, 25_000, 30_000, 35_000, 40_000];
-const DEPOSIT_RATES = [0, 10, 15, 20, 30];
 
 function mileageMult(km: number) {
   if (km <= 10_000) return 1.0;
@@ -23,6 +21,9 @@ function mileageMult(km: number) {
   if (km <= 35_000) return 1.28;
   return 1.35;
 }
+
+const TERM = 48;
+const DEPOSIT_RATE = 30;
 
 export default function PriceCalculator({
   car, selectedTrim, selectedOptionNames, trimOptions,
@@ -36,9 +37,7 @@ export default function PriceCalculator({
   selectedInColor: ColorOption | null;
 }) {
   const displayPrice = selectedTrim?.price || car.carPrice;
-  const [term, setTerm] = useState(48);
   const [mileage, setMileage] = useState(10_000);
-  const [depositRate, setDepositRate] = useState(30);
 
   const optionTotal = trimOptions
     .filter((o) => selectedOptionNames.has(o.name))
@@ -49,35 +48,23 @@ export default function PriceCalculator({
   const trimRatio = car.carPrice > 0 ? displayPrice / car.carPrice : 1;
 
   const calc = useMemo(() => {
-    const termMult = car.contractTermMultiplier[term] || 1.0;
-    const extrasMonthly = extrasTotal / term;
-    const depositAmount = Math.round((totalPrice * depositRate) / 100);
+    const termMult = car.contractTermMultiplier[TERM] || 1.0;
+    const extrasMonthly = extrasTotal / TERM;
+    const depositAmount = Math.round((totalPrice * DEPOSIT_RATE) / 100);
     const discount = depositAmount * 0.00513;
     const baseMonthly = car.baseMonthlyPrice * trimRatio;
     const monthly = Math.max(0, Math.round((baseMonthly * termMult * mileageMult(mileage) + extrasMonthly - discount) * 1.1));
-    return { monthly, depositAmount, totalPayment: monthly * term };
-  }, [car, term, mileage, depositRate, displayPrice, extrasTotal, trimRatio]);
+    return { monthly, depositAmount, totalPayment: monthly * TERM };
+  }, [car, mileage, displayPrice, extrasTotal, trimRatio]);
 
   return (
     <div className="card rounded-2xl p-6 md:p-8">
       <h2 className="text-xl font-bold text-primary">간편 견적 계산기</h2>
-      <p className="mt-1 text-xs text-text-muted">계약 조건을 변경하면 월 렌트료가 실시간으로 계산됩니다.</p>
+      <p className="mt-1 text-xs text-text-muted">48개월 · 보증금 30% 기준 월 렌트료를 확인하세요.</p>
 
       <div className="mt-6 grid gap-8 md:grid-cols-2">
         <div className="space-y-6">
-          {/* 계약 기간 */}
-          <div>
-            <label className="mb-2 block text-sm font-bold text-primary">계약 기간</label>
-            <div className="flex flex-wrap gap-1.5">
-              {TERMS.map((t) => (
-                <button key={t} onClick={() => setTerm(t)}
-                  className={`rounded-lg px-4 py-2 text-sm font-bold transition-all ${
-                    term === t ? 'bg-primary text-white' : 'bg-surface-raised text-text-secondary hover:bg-border'
-                  }`}>{t}개월</button>
-              ))}
-            </div>
-          </div>
-          {/* 주행거리 */}
+          {/* 주행거리 (유일한 선택 항목) */}
           <div>
             <label className="mb-2 block text-sm font-bold text-primary">연간 주행거리</label>
             <div className="flex flex-wrap gap-1.5">
@@ -89,21 +76,17 @@ export default function PriceCalculator({
               ))}
             </div>
           </div>
-          {/* 보증금 */}
-          <div>
-            <label className="mb-2 block text-sm font-bold text-primary">보증금</label>
-            <div className="flex flex-wrap gap-1.5">
-              {DEPOSIT_RATES.map((r) => {
-                const amt = Math.round((displayPrice * r) / 100);
-                return (
-                  <button key={r} onClick={() => setDepositRate(r)}
-                    className={`rounded-lg px-3 py-2 text-xs font-bold transition-all ${
-                      depositRate === r ? 'bg-primary text-white' : 'bg-surface-raised text-text-secondary hover:bg-border'
-                    }`}>{fmtPrice(amt)} ({r}%)</button>
-                );
-              })}
+
+          {/* 고정 조건 안내 */}
+          <div className="rounded-xl bg-surface-raised p-4 space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-text-secondary">계약 기간</span>
+              <span className="font-semibold">{TERM}개월 (고정)</span>
             </div>
-            <p className="mt-1 text-[0.6rem] text-text-muted">보증금은 만기 후 환불됩니다</p>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-text-secondary">보증금</span>
+              <span className="font-semibold">{DEPOSIT_RATE}% (고정 / 만기 환불)</span>
+            </div>
           </div>
         </div>
 
@@ -120,7 +103,7 @@ export default function PriceCalculator({
             </div>
             <div className="flex justify-between border-b border-border pb-3 text-sm">
               <span className="text-text-secondary">계약 기간</span>
-              <span className="font-semibold">{term}개월</span>
+              <span className="font-semibold">{TERM}개월</span>
             </div>
             <div className="flex justify-between border-b border-border pb-3 text-sm">
               <span className="text-text-secondary">주행거리</span>
@@ -143,7 +126,7 @@ export default function PriceCalculator({
               <p className="text-[0.6rem] text-text-muted">월 예상 렌트료 (부가세 포함)</p>
               <p className="text-3xl font-extrabold text-accent">{fmtMonthly(calc.monthly)}</p>
               <p className="text-[0.5rem] text-text-muted mt-1">
-                {term}개월 총 {fmtPrice(calc.totalPayment)} · 보증금 포함 {fmtPrice(calc.depositAmount + calc.totalPayment)}
+                {TERM}개월 총 {fmtPrice(calc.totalPayment)} · 보증금 포함 {fmtPrice(calc.depositAmount + calc.totalPayment)}
               </p>
             </div>
           </div>

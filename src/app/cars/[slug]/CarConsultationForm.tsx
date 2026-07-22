@@ -138,6 +138,34 @@ export default function CarConsultationForm({
         </div>
       </div>
 
+      {/* ── 즉시출고 ── */}
+      <div className="rounded-xl border border-border bg-surface-raised p-4">
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" name="immediate_delivery" value="yes" className="mt-0.5 h-4 w-4 accent-accent" />
+          <div>
+            <span className="text-sm font-bold text-primary">🚗 즉시출고 희망</span>
+            <p className="mt-0.5 text-xs text-text-muted">옵션이 조금 달라도 상담시 옵션 협의 가능합니다.</p>
+          </div>
+        </label>
+      </div>
+
+      {/* ── 추가용품 (가격 미반영) ── */}
+      <div className="rounded-xl border border-border bg-surface-raised p-4">
+        <label className="mb-2 block text-sm font-bold text-primary">추가 용품 (견적에 포함되지 않음)</label>
+        <div className="space-y-2">
+          {[
+            { name: 'additional_items', value: '전체썬팅', label: '전체썬팅' },
+            { name: 'additional_items', value: '하이패스단말기', label: '하이패스 단말기' },
+            { name: 'additional_items', value: '블랙박스', label: '블랙박스' },
+          ].map((item) => (
+            <label key={item.value} className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name={item.name} value={item.value} className="h-4 w-4 accent-accent" />
+              <span className="text-sm">{item.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
       <div>
         <label className="flex items-start gap-2 cursor-pointer">
           <input type="checkbox" name="agree" required className="mt-0.5 h-4 w-4 accent-accent" />
