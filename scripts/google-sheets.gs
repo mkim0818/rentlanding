@@ -1,4 +1,4 @@
-const SHEET_NAME = '리드';
+const SHEET_NAME = 'Leads';
 const SECRET = 'rentlead-2026-secret'; // ← 원하는 비밀키로 변경
 
 function doPost(e) {
@@ -16,7 +16,7 @@ function doPost(e) {
       sheet.appendRow(['이름','연락처','차량','고객유형','희망시기','예산','기간','상담방식','카카오ID','UTM소스','등록일시']);
     }
     sheet.appendRow([
-      data.name || '', data.phone || '', data.carType || '',
+      data.name || '', data.phone || '', data.carType || '', data.carModel || '',
       data.customerType || '', data.preferredPeriod || '',
       data.budget || '', data.contractPeriod || '',
       data.contactMethod || '', data.kakaoId || '',

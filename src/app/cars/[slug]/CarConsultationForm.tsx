@@ -81,6 +81,7 @@ export default function CarConsultationForm({
       <UtmInjector />
       <input type="hidden" name="car_slug" value={car.slug} />
       <input type="hidden" name="car_type" value={selectionSummary} />
+      <input type="hidden" name="car_model" value={`${car.brand} ${car.model}`} />
 
       <div className="rounded-lg bg-surface-raised px-4 py-3">
         <div className="text-xs text-text-muted mb-1">선택 차량</div>

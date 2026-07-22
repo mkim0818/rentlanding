@@ -21,6 +21,7 @@ export async function submitLead(
   const customerType = formData.get('customer_type')?.toString().trim() || null;
   const preferredPeriod = formData.get('preferred_period')?.toString().trim() || null;
   const carSlug = formData.get('car_slug')?.toString().trim() || null;
+  const carModel = formData.get('car_model')?.toString().trim() || null;
   const kakaoId = formData.get('kakao_id')?.toString().trim() || null;
   const agree = formData.get('agree') === 'on';
   const utmSource = formData.get('utm_source')?.toString().trim() || null;
@@ -43,7 +44,7 @@ export async function submitLead(
     const res = await fetch(sheetsUrl, {
       method: 'POST',
       body: JSON.stringify({
-        name, phone, carType, customerType, preferredPeriod,
+        name, phone, carType, carModel, customerType, preferredPeriod,
         budget, contractPeriod, contactMethod, carSlug, kakaoId,
         utmSource, utmMedium, utmCampaign,
         secret: process.env.GOOGLE_SHEETS_SECRET || 'rentlead-2026-secret',
