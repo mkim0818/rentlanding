@@ -119,6 +119,12 @@ function QuickForm({ carSlug, car }: { carSlug?: string; car?: typeof cars[numbe
       <span className="text-xs text-text-secondary">개인정보 수집·이용 동의 *</span>
     </label>
     {state.errors?.agree && <p className="mt-1 text-xs text-error">{state.errors.agree}</p>}
+    <input type="hidden" name="customer_type" value="personal" />
+    <input type="hidden" name="preferred_period" value="미정" />
+    <label className="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" name="immediate_delivery" value="yes" className="h-4 w-4 accent-accent" />
+      <span className="text-xs text-text-secondary">즉시 출고 희망</span>
+    </label>
     <button type="submit" className="btn-primary w-full text-base flex items-center justify-center gap-2">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="currentColor" d="M9 0C4.03 0 0 3.127 0 6.986c0 2.465 1.624 4.63 4.07 5.862l-1.03 3.786c-.058.215.188.39.379.27l4.578-3.036c.328.046.662.07 1.003.07 4.97 0 9-3.127 9-6.986C18 3.127 13.97 0 9 0z"/></svg>
       카카오로 간편 상담 신청

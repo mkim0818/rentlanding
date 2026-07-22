@@ -50,11 +50,14 @@ export async function submitLead(
     const res = await fetch(sheetsUrl, {
       method: 'POST',
       body: JSON.stringify({
-        name, phone, carType, carModel, carTrim, carOptions,
-        carExteriorColor, carInteriorColor,
+        name, phone,
+        carModel,
+        carTrim: carTrim || carType,
+        carOptions: carOptions || '',
+        carColor: [carExteriorColor, carInteriorColor].filter(Boolean).join(' / ') || '',
         customerType, preferredPeriod,
-        budget, contractPeriod, contactMethod, carSlug, kakaoId,
-        immediateDelivery, additionalItems,
+        urgent: immediateDelivery || '',
+        kakaoId,
         utmSource, utmMedium, utmCampaign,
         secret: process.env.GOOGLE_SHEETS_SECRET || 'rentlead-2026-secret',
       }),

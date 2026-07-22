@@ -55,11 +55,11 @@ export default function CarConsultationForm({
 
   const selectedOpts = allOptions.filter((o) => selectedOptionNames.has(o.name));
   const optionsStr = selectedOpts.map((o) => o.name).join(', ');
+  const colorStr = [selectedExColor?.name, selectedInColor?.name].filter(Boolean).join(' / ');
   const selectionSummary = [
     selectedTrim?.name,
-    selectedExColor?.name,
-    selectedInColor?.name,
-    ...selectedOpts.map((o) => o.name),
+    colorStr,
+    optionsStr,
   ].filter(Boolean).join(' / ');
 
   if (state.success) {
@@ -83,6 +83,10 @@ export default function CarConsultationForm({
       <input type="hidden" name="car_slug" value={car.slug} />
       <input type="hidden" name="car_type" value={selectionSummary} />
       <input type="hidden" name="car_model" value={`${car.brand} ${car.model}`} />
+      <input type="hidden" name="car_trim" value={selectedTrim?.name || car.trim} />
+      <input type="hidden" name="car_options" value={optionsStr} />
+      <input type="hidden" name="car_exterior_color" value={selectedExColor?.name || ''} />
+      <input type="hidden" name="car_interior_color" value={selectedInColor?.name || ''} />
       <input type="hidden" name="car_trim" value={selectedTrim?.name || car.trim} />
       <input type="hidden" name="car_options" value={optionsStr} />
       <input type="hidden" name="car_exterior_color" value={selectedExColor?.name || ''} />
