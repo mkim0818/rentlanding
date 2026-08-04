@@ -87,10 +87,6 @@ export default function CarConsultationForm({
       <input type="hidden" name="car_options" value={optionsStr} />
       <input type="hidden" name="car_exterior_color" value={selectedExColor?.name || ''} />
       <input type="hidden" name="car_interior_color" value={selectedInColor?.name || ''} />
-      <input type="hidden" name="car_trim" value={selectedTrim?.name || car.trim} />
-      <input type="hidden" name="car_options" value={optionsStr} />
-      <input type="hidden" name="car_exterior_color" value={selectedExColor?.name || ''} />
-      <input type="hidden" name="car_interior_color" value={selectedInColor?.name || ''} />
 
       <div className="rounded-lg bg-surface-raised px-4 py-3">
         <div className="text-xs text-text-muted mb-1">선택 차량</div>

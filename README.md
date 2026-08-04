@@ -7,7 +7,7 @@ Next.js 16(App Router) + TypeScript + Tailwind CSS v4 기반 렌터카 장기렌
 
 - **배포**: [Vercel](https://vercel.com/minyoung-kim-s-projects/rentlanding)
 - **GitHub**: https://github.com/mkim0818/rentlanding
-- **DB**: Vercel Postgres (`leads` 테이블)
+- **DB**: Google Sheets (Apps Script webhook, 리드 저장)
 - **개발 서버**: `npm run dev` → `http://localhost:3000`
 
 ## 페이지 구조
