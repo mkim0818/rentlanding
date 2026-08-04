@@ -3,7 +3,7 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('리드');
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['이름','연락처','차량','트림','옵션','컬러','고객유형','희망시기','즉시출고','카카오ID','UTM소스','UTM매체','UTM캠페인','등록일시']);
+      sheet.appendRow(['이름','연락처','차량','트림','옵션','외장컬러','내장컬러','고객유형','희망시기','즉시출고','카카오ID','UTM소스','UTM매체','UTM캠페인','등록일시']);
     }
     sheet.appendRow([
       data.name || '',
@@ -11,7 +11,8 @@ function doPost(e) {
       data.carModel || '',
       data.carTrim || '',
       data.carOptions || '',
-      data.carColor || '',
+      data.carExteriorColor || '',
+      data.carInteriorColor || '',
       data.customerType || '',
       data.preferredPeriod || '',
       data.urgent || '',
