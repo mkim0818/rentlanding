@@ -2397,7 +2397,7 @@ export const cars: Car[] = [
     fuelType: '하이브리드',
     image: '/images/cars/byd-6-2026.webp',
     carPrice: 37500000,
-    baseMonthlyPrice: 634150,
+    baseMonthlyPrice: 622490,
     badge: 'NEW',
     specs: { displacement: 0, seats: 5, fuelEfficiency: '정보없음', drivetrain: '2WD', transmission: 'A/T' },
     options: [],
