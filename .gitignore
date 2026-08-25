@@ -40,3 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env.local
+
+# === Omarchy 이관 후 로컬 전용 / 민감 ===
+.git.omarchy-backup/
+.clasp-home/
+reasonix.toml
+.clasp/.clasprc.json
+.clasp/.clasprc.*
