@@ -1,4 +1,4 @@
-// ── Amazoncar API v4 (151 cars, 691 trim-specific option sets) ──
+// ── Amazoncar API v4 (151 cars, 692 trim-specific option sets) ──
 
 export interface CarOption {
   name: string;
@@ -1761,17 +1761,17 @@ export const cars: Car[] = [
     slug: 'audi-a6-2026',
     brand: '아우디',
     model: 'The new A6',
-    trim: '40 TFSI S-line',
+    trim: '40 TFSI Advanced',
     year: 2026,
     carType: '중형',
     fuelType: '가솔린',
     image: '/images/cars/audi-a6-2026.webp',
-    carPrice: 72060000,
+    carPrice: 68800000,
     baseMonthlyPrice: 967670,
     badge: 'NEW',
     specs: { displacement: 0, seats: 5, fuelEfficiency: '정보없음', drivetrain: '2WD', transmission: 'A/T' },
-    options: [{"name": "DISPLAY", "price": 1450000}],
-    availableTrims: [{"name": "40 TFSI S-line", "price": 72060000, "code": "011218 02", "options": [{"name": "DISPLAY", "price": 1450000}]}, {"name": "40 TDI quattro S-line", "price": 83200000, "code": "011216 03", "options": [{"name": "DISPLAY", "price": 1480000}]}, {"name": "45 TFSI quattro S-line", "price": 85410000, "code": "011219 02", "options": [{"name": "DISPLAY", "price": 1450000}]}, {"name": "55 TFSI quattro S-line", "price": 98900000, "code": "011220 03", "options": []}],
+    options: [{"name": "DISPLAY", "price": 1480000}, {"name": "브라운시트", "price": 530000}],
+    availableTrims: [{"name": "40 TFSI Advanced", "price": 68800000, "code": "011217 03", "options": [{"name": "DISPLAY", "price": 1480000}, {"name": "브라운시트", "price": 530000}]}, {"name": "40 TFSI S-line", "price": 72060000, "code": "011218 02", "options": [{"name": "DISPLAY", "price": 1450000}]}, {"name": "40 TDI quattro S-line", "price": 83200000, "code": "011216 03", "options": [{"name": "DISPLAY", "price": 1480000}]}, {"name": "45 TFSI quattro S-line", "price": 85410000, "code": "011219 02", "options": [{"name": "DISPLAY", "price": 1450000}]}, {"name": "55 TFSI quattro S-line", "price": 98900000, "code": "011220 03", "options": []}],
     exteriorColors: [],
     interiorColors: [],
     contractTermMultiplier: { 24: 1.33, 36: 1.14, 48: 1.0, 60: 0.90, 72: 0.83 },
