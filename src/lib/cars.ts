@@ -1,4 +1,4 @@
-// ── Amazoncar API v4 (153 cars, 711 trim-specific option sets) ──
+// ── Amazoncar API v4 (155 cars, 712 trim-specific option sets) ──
 
 export interface CarOption {
   name: string;
@@ -1393,7 +1393,7 @@ export const cars: Car[] = [
     badge: 'NEW',
     specs: { displacement: 0, seats: 5, fuelEfficiency: '정보없음', drivetrain: '2WD', transmission: 'A/T' },
     options: [{"name": "증강현실 헤드업 디스플레이(AR-HUD) + 스마트 룸미러", "price": 1650000}, {"name": "시그니처 패키지+ 증강현실 헤드업 디스플레이(AR-HUD)+ 스마트 룸미러", "price": 2150000}, {"name": "BOSE 서라운드 사운드 시스템(10 스피커) + 액티브 노이즈 캔슬레이션", "price": 1350000}, {"name": "퓨어 라이트 그레이 프리미엄 인테리어+ 그레이/블랙 투톤 스티어링 휠", "price": 400000}, {"name": "[액세서리]사이드스텝", "price": 465000}, {"name": "[액세서리]전동 사이드스텝", "price": 890000}, {"name": "[액세서리]전동 선쉐이드 블랙", "price": 690000}, {"name": "[액세서리]프론트 그릴 데코", "price": 50000}, {"name": "[액세서리]트렁크 엔트리 가드", "price": 88000}, {"name": "[액세서리]스크린 보호필름", "price": 78000}, {"name": "[액세서리]썬쉐이드", "price": 150000}, {"name": "[액세서리]스포츠 페달", "price": 80000}, {"name": "[액세서리]공간 분리형 트렁크 라이너", "price": 150000}, {"name": "[액세서리]필랑트 도어 스팟 램프", "price": 150000}, {"name": "[액세서리]R-cam", "price": 350000}],
-    availableTrims: [{"name": "E-Tech 1.5 터보 아이코닉", "price": 48640000, "code": "011105 02", "options": [{"name": "증강현실 헤드업 디스플레이(AR-HUD) + 스마트 룸미러", "price": 1650000}, {"name": "시그니처 패키지+ 증강현실 헤드업 디스플레이(AR-HUD)+ 스마트 룸미러", "price": 2150000}, {"name": "BOSE 서라운드 사운드 시스템(10 스피커) + 액티브 노이즈 캔슬레이션", "price": 1350000}, {"name": "퓨어 라이트 그레이 프리미엄 인테리어+ 그레이/블랙 투톤 스티어링 휠", "price": 400000}, {"name": "[액세서리]사이드스텝", "price": 465000}, {"name": "[액세서리]전동 사이드스텝", "price": 890000}, {"name": "[액세서리]전동 선쉐이드 블랙", "price": 690000}, {"name": "[액세서리]프론트 그릴 데코", "price": 50000}, {"name": "[액세서리]트렁크 엔트리 가드", "price": 88000}, {"name": "[액세서리]스크린 보호필름", "price": 78000}, {"name": "[액세서리]썬쉐이드", "price": 150000}, {"name": "[액세서리]스포츠 페달", "price": 80000}, {"name": "[액세서리]공간 분리형 트렁크 라이너", "price": 150000}, {"name": "[액세서리]필랑트 도어 스팟 램프", "price": 150000}, {"name": "[액세서리]R-cam", "price": 350000}]}, {"name": "E-Tech 1.5 터보 에스프리 알핀", "price": 51440000, "code": "011106 02", "options": [{"name": "증강현실 헤드업 디스플레이(AR-HUD)", "price": 1150000}, {"name": "BOSE 서라운드 사운드 시스템(10 스피커) + 액티브 노이즈 캔슬레이션", "price": 1350000}, {"name": "[액세서리]사이드스텝", "price": 465000}, {"name": "[액세서리]전동 사이드스텝", "price": 890000}, {"name": "[액세서리]전동 선쉐이드 블랙", "price": 690000}, {"name": "[액세서리]프론트 그릴 데코", "price": 50000}, {"name": "[액세서리]트렁크 엔트리 가드", "price": 88000}, {"name": "[액세서리]스크린 보호필름", "price": 78000}, {"name": "[액세서리]썬쉐이드", "price": 150000}, {"name": "[액세서리]스포츠 페달", "price": 80000}, {"name": "[액세서리]공간 분리형 트렁크 라이너", "price": 150000}, {"name": "[액세서리]필랑트 도어 스팟 램프", "price": 150000}, {"name": "[액세서리]R-cam", "price": 350000}]}],
+    availableTrims: [{"name": "E-Tech 1.5 터보 아이코닉", "price": 48640000, "code": "011105 02", "options": [{"name": "증강현실 헤드업 디스플레이(AR-HUD) + 스마트 룸미러", "price": 1650000}, {"name": "시그니처 패키지+ 증강현실 헤드업 디스플레이(AR-HUD)+ 스마트 룸미러", "price": 2150000}, {"name": "BOSE 서라운드 사운드 시스템(10 스피커) + 액티브 노이즈 캔슬레이션", "price": 1350000}, {"name": "퓨어 라이트 그레이 프리미엄 인테리어+ 그레이/블랙 투톤 스티어링 휠", "price": 400000}, {"name": "[액세서리]사이드스텝", "price": 465000}, {"name": "[액세서리]전동 사이드스텝", "price": 890000}, {"name": "[액세서리]전동 선쉐이드 블랙", "price": 690000}, {"name": "[액세서리]프론트 그릴 데코", "price": 50000}, {"name": "[액세서리]트렁크 엔트리 가드", "price": 88000}, {"name": "[액세서리]스크린 보호필름", "price": 78000}, {"name": "[액세서리]썬쉐이드", "price": 150000}, {"name": "[액세서리]스포츠 페달", "price": 80000}, {"name": "[액세서리]공간 분리형 트렁크 라이너", "price": 150000}, {"name": "[액세서리]필랑트 도어 스팟 램프", "price": 150000}, {"name": "[액세서리]R-cam", "price": 350000}]}, {"name": "E-Tech 1.5 터보 에스프리 알핀", "price": 51440000, "code": "011106 02", "options": [{"name": "증강현실 헤드업 디스플레이(AR-HUD)", "price": 1150000}, {"name": "BOSE 서라운드 사운드 시스템(10 스피커) + 액티브 노이즈 캔슬레이션", "price": 1350000}, {"name": "[액세서리]사이드스텝", "price": 465000}, {"name": "[액세서리]전동 사이드스텝", "price": 890000}, {"name": "[액세서리]전동 선쉐이드 블랙", "price": 690000}, {"name": "[액세서리]프론트 그릴 데코", "price": 50000}, {"name": "[액세서리]트렁크 엔트리 가드", "price": 88000}, {"name": "[액세서리]스크린 보호필름", "price": 78000}, {"name": "[액세서리]썬쉐이드", "price": 150000}, {"name": "[액세서리]스포츠 페달", "price": 80000}, {"name": "[액세서리]공간 분리형 트렁크 라이너", "price": 150000}, {"name": "[액세서리]필랑트 도어 스팟 램프", "price": 150000}, {"name": "[액세서리]R-cam", "price": 350000}]}, {"name": "E-Tech 1.5 터보 누아르 에디션", "price": 52940000, "code": "011418 01", "options": [{"name": "[액세서리]누아르 에디션 패키지", "price": 798000}, {"name": "[액세서리]스탠다드 패키지", "price": 372000}]}],
     exteriorColors: [{"name": "클라우드 펄", "price": 300000, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/01/CAR_COL_20260115173152267_0.jpg"}, {"name": "어반 그레이", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/01/CAR_COL_20260115173201080_0.jpg"}, {"name": "메탈릭 블랙", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/01/CAR_COL_20260115173211582_0.jpg"}, {"name": "[무광] 새틴 포레스트 블랙", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/09/CAR_COL_20260902170102468_0.png"}],
     interiorColors: [{"name": "퓨어 라이트 그레이 나파 인조 가죽 시트", "price": 0, "url": ""}, {"name": "모던 브라운 나파 인조 가죽 시트", "price": 0, "url": ""}],
     contractTermMultiplier: { 24: 1.33, 36: 1.14, 48: 1.0, 60: 0.90, 72: 0.83 },
@@ -1972,6 +1972,42 @@ export const cars: Car[] = [
     availableTrims: [{"name": "S350 d 4MATIC", "price": 154000000, "code": "011256 01", "options": [{"name": "베이지시트", "price": 730000}, {"name": "브라운시트", "price": 730000}]}, {"name": "S450 4MATIC", "price": 162400000, "code": "011257 01", "options": [{"name": "베이지시트", "price": 730000}, {"name": "브라운시트", "price": 730000}]}, {"name": "S450 4MATIC Long Exclusive", "price": 175400000, "code": "011258 01", "options": [{"name": "베이지시트", "price": 730000}, {"name": "브라운시트", "price": 730000}]}, {"name": "S450 4MATIC Long AMG Line", "price": 195400000, "code": "011259 01", "options": [{"name": "베이지시트", "price": 730000}, {"name": "브라운시트", "price": 730000}]}, {"name": "S500 4MATIC Long", "price": 220000000, "code": "011260 01", "options": [{"name": "베이지시트", "price": 730000}, {"name": "브라운시트", "price": 730000}]}, {"name": "S580 4MATIC Long", "price": 270000000, "code": "011261 01", "options": []}],
     exteriorColors: [],
     interiorColors: [],
+    contractTermMultiplier: { 24: 1.33, 36: 1.14, 48: 1.0, 60: 0.90, 72: 0.83 },
+  },  {
+    slug: 'bmw-7-series-2026',
+    brand: 'BMW',
+    model: 'New 7 Series',
+    trim: '740 xDrive PE(퓨어 엑설런스) LCI',
+    year: 2026,
+    carType: '대형',
+    fuelType: '가솔린',
+    image: '/images/cars/bmw-7-series-2026.webp',
+    carPrice: 161900000,
+    baseMonthlyPrice: 2383480,
+    badge: 'NEW',
+    specs: { displacement: 0, seats: 5, fuelEfficiency: '정보없음', drivetrain: '2WD', transmission: 'A/T' },
+    options: [],
+    availableTrims: [{"name": "740 xDrive PE(퓨어 엑설런스) LCI", "price": 161900000, "code": "011412 01", "options": []}, {"name": "740 xDrive M Sport LCI", "price": 164900000, "code": "011413 01", "options": []}, {"name": "740 xDrive M Sport Executive(이그제큐티브) LCI", "price": 179200000, "code": "011414 01", "options": []}],
+    exteriorColors: [{"name": "블랙 사파이어", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111115728765_3.jpeg"}, {"name": "미네랄 화이트", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111115728765_0.jpeg"}, {"name": "브루클린 그레이", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111115728765_1.jpeg"}, {"name": "옥사이드 그레이", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111115728765_2.jpeg"}],
+    interiorColors: [{"name": "스모크 화이트", "price": 0, "url": ""}, {"name": "블랙", "price": 0, "url": ""}, {"name": "타르투포", "price": 0, "url": ""}, {"name": "모카", "price": 0, "url": ""}],
+    contractTermMultiplier: { 24: 1.33, 36: 1.14, 48: 1.0, 60: 0.90, 72: 0.83 },
+  },  {
+    slug: 'bmw-i7-2026',
+    brand: 'BMW',
+    model: 'i7',
+    trim: '50 xDrive PE(퓨어 엑설런스) LCI',
+    year: 2026,
+    carType: '대형',
+    fuelType: '전기',
+    image: '/images/cars/bmw-i7-2026.webp',
+    carPrice: 169900000,
+    baseMonthlyPrice: 2573120,
+    badge: 'NEW',
+    specs: { displacement: 0, seats: 5, fuelEfficiency: '정보없음', drivetrain: '2WD', transmission: 'A/T' },
+    options: [],
+    availableTrims: [{"name": "50 xDrive PE(퓨어 엑설런스) LCI", "price": 169900000, "code": "011415 01", "options": []}, {"name": "50 xDrive M Sport LCI", "price": 172900000, "code": "011416 01", "options": []}, {"name": "60 xDrive M Sport LCI", "price": 217900000, "code": "011417 01", "options": []}],
+    exteriorColors: [{"name": "블랙 사파이어", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111134358288_0.jpeg"}, {"name": "미네랄 화이트", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111134358288_1.jpeg"}, {"name": "브루클린 그레이", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111134358288_2.jpeg"}, {"name": "옥사이드 그레이", "price": 0, "url": "https://amazoncar.co.kr/attach/CAR_COL/2026/11/CAR_COL_20261111134358288_3.jpeg"}],
+    interiorColors: [{"name": "스모크 화이트", "price": 0, "url": ""}, {"name": "블랙", "price": 0, "url": ""}, {"name": "타르투포", "price": 0, "url": ""}, {"name": "모카", "price": 0, "url": ""}],
     contractTermMultiplier: { 24: 1.33, 36: 1.14, 48: 1.0, 60: 0.90, 72: 0.83 },
   },  {
     slug: 'audi-a8-2026',
